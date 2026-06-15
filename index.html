@@ -750,27 +750,23 @@
       <thead><tr style="background:#EEEDFE">
         <th style="color:#3C3489">Stage blocked</th>
         <th style="color:#3C3489">Problem</th>
-        <th style="color:#3C3489">Why it blocks the motion</th>
-        <th style="color:#3C3489;text-align:center">Target cycle</th>
+        <th style="color:#3C3489">What this looks like in practice</th>
       </tr></thead>
       <tbody>
         <tr style="background:#FFF8ED">
           <td><span style="background:#BA7517;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Activate</span></td>
           <td><strong>DS-1 ★</strong> No alert when algorithm fires but prices don't push</td>
-          <td>Mi Bikes was on autopilot with zero pushes for 30 days — caught manually. Trust erosion delays expansion every time this happens.</td>
-          <td style="text-align:center;background:#EAF7F2;color:#085041;font-weight:600">Cycle 8</td>
+          <td>Mi Bikes sat on autopilot for 30 days with zero prices ever pushed. We found out because the operator told us — not because we caught it. By then trust was damaged and the expansion conversation was delayed by 3 weeks. This will repeat every time at scale.</td>
         </tr>
         <tr>
           <td><span style="background:#BA7517;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Activate</span></td>
           <td><strong>DS-2</strong> No WAAP leak detection (autopilot reversion)</td>
-          <td>Operator turns off autopilot — we don't know. WAAP drops silently. CSM is unprepared at the D30 call.</td>
-          <td style="text-align:center;background:#EAF7F2;color:#085041;font-weight:600">Cycle 8</td>
+          <td>An operator manually turns off autopilot on 3 products. The prices freeze. Competitors move. We find out at the Day 30 call when the lift numbers don't add up. We looked unprepared. The operator's confidence in the algorithm drops — right before we were about to propose the next batch.</td>
         </tr>
         <tr style="background:#FFF8ED">
           <td><span style="background:#1D9E75;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Expand</span></td>
           <td><strong>DS-3</strong> No automated lift report at D14 and D30</td>
-          <td>CSM prepares every data report manually. Not scalable past 20 accounts. Expansion argument weakens when data is delayed or incomplete.</td>
-          <td style="text-align:center;background:#EAF7F2;color:#085041;font-weight:600">Cycle 8</td>
+          <td>Before every D14 and D30 call, CSM manually pulls data from multiple sources and formats it. At 10 accounts that's manageable. At 30 accounts, it crowds out everything else — calls get pushed, the expansion argument lands late, and the window closes.</td>
         </tr>
       </tbody>
     </table>
@@ -782,33 +778,28 @@
       <thead><tr style="background:#EAF7F2">
         <th style="color:#085041">Stage blocked</th>
         <th style="color:#085041">Problem</th>
-        <th style="color:#085041">Why it blocks the motion</th>
-        <th style="color:#085041;text-align:center">Target cycle</th>
+        <th style="color:#085041">What this looks like in practice</th>
       </tr></thead>
       <tbody>
         <tr style="background:#FFF8ED">
           <td><span style="background:#BA7517;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Activate</span></td>
           <td><strong>CS-2 ★</strong> No automated 30-day at-risk alert</td>
-          <td>100% autopilot by D30 is our top OKR. Without this alert, accounts fall through the cracks as volume grows past 20.</td>
-          <td style="text-align:center;background:#EAF7F2;color:#085041;font-weight:600">Cycle 8</td>
+          <td>At 15 accounts a CSM can track D30 manually with a spreadsheet. At 25 accounts someone slips. At 35, multiple accounts hit D30 under 50% autopilot and nobody notices until the operator asks why the algorithm hasn't been doing anything — or worse, they don't renew.</td>
         </tr>
         <tr>
           <td><span style="background:#1D9E75;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Expand</span></td>
           <td><strong>CS-1 ★</strong> No automated expansion trigger when lift threshold is hit</td>
-          <td>CSM manually monitors expansion readiness. Misses optimal timing. $29K expansion MRR requires catching every window.</td>
-          <td style="text-align:center;background:#EAF7F2;color:#085041;font-weight:600">Cycle 8</td>
+          <td>The optimal moment to propose the next batch is the day lift crosses the threshold — when the data is fresh and the operator is excited. Without a trigger, CSM checks manually and often catches it 2–3 weeks late. By then, the moment is gone and the conversation is harder to start.</td>
         </tr>
         <tr style="background:#FFF8ED">
           <td><span style="background:#085041;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Refer</span></td>
           <td><strong>CS-3</strong> Case study creation is manual and slow</td>
-          <td>Fire rate well below 100%. Terry can't publish what Alegria hasn't created. Reference pipeline (2→8) depends on this being automated.</td>
-          <td style="text-align:center;background:#EAF7F2;color:#085041;font-weight:600">Cycle 8</td>
+          <td>Boost Portugal hit their lift milestone. It took 3 weeks to get a case study published. In those 3 weeks, Terry's outreach sequences went out with no Boost case study. Prospects got a weaker pitch. The loop leaked at the exact moment it should have compounded.</td>
         </tr>
         <tr>
           <td><span style="background:#888;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Scale</span></td>
           <td><strong>CS-5</strong> Onboarding requires manual PA setup per operator</td>
-          <td>PA manually configures every new operator. Hard ceiling at ~50 accounts — beyond that, onboarding becomes the constraint, not sales.</td>
-          <td style="text-align:center;background:#FFF8ED;color:#633806;font-weight:600">Cycle 9</td>
+          <td>PA manually maps every product for every new operator. A 5-product operator takes 30 minutes. A 20-product operator takes 2 hours. At 40 active operators, PA becomes the onboarding bottleneck — new customers are waiting to go live because of configuration backlog, not because of sales.</td>
         </tr>
       </tbody>
     </table>
@@ -1015,19 +1006,20 @@
         </tr>
         <tr style="background:#FFF8ED">
           <td><span style="background:#085041;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Refer</span></td>
-          <td>Reference-willing customers</td>
+          <td>Customers willing to speak to a prospect on request <span style="font-size:10px;color:#888;display:block;margin-top:2px">If I'm closing a deal and the prospect says "can I speak to someone who's been using this?" — how many operators can I call on right now?</span></td>
           <td>2</td>
           <td style="color:#1D9E75;font-weight:600">6</td>
-          <td>4 by Jul 31 (Boost, Empire, Airboat, HTA)</td>
+          <td>4 by Jul 31: Boost, Empire, Airboat, HTA</td>
           <td>Alegria · CS tracker</td>
         </tr>
         <tr>
           <td><span style="background:#085041;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Refer</span></td>
-          <td>Case study fire rate at lift milestone</td>
+          <td>Case study published within 14 days of lift milestone <span style="font-size:10px;color:#888;display:block;margin-top:2px">When a customer confirms revenue lift, Terry needs a published case study within 14 days to drop into email sequences — this is what makes outreach Email 2 specific instead of generic.</span></td>
           <td>&lt;50%</td>
-          <td style="color:#1D9E75;font-weight:600">100% within 7 days of milestone</td>
-          <td>Boost Portugal case study published</td>
+          <td style="color:#1D9E75;font-weight:600">100% hit rate</td>
+          <td>Boost Portugal case study first — publish this week</td>
           <td>Terry · Marketing tracker</td>
+        </tr>
         </tr>
       </tbody>
     </table>
