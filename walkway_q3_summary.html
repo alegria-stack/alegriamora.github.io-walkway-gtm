@@ -344,6 +344,9 @@ tr:last-child td{border-bottom:none}
 
   <div class="dep-group">Trust & reliability</div>
 
+  
+  <div style="font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:8px;margin-top:4px">Trust & reliability — the foundation of WAAP growth</div>
+
   <div class="dep-card">
     <div class="dep-card-hdr"><span class="dp h">High</span><span class="ds">Activate</span><span class="dep-card-name">Autopilot failure detection</span></div>
     <div class="dep-card-body">
@@ -359,15 +362,6 @@ tr:last-child td{border-bottom:none}
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">Operators receive incorrect price outputs — wrong currency, prices stuck at floor or ceiling, pushes too high or too low, algorithm behavior they can't explain.</div></div>
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl cf">In practice</span><span class="dc-badge">10 tickets</span></div><div class="dc-txt">Largest single issue cluster across the client base. Examples: MXN/USD currency mismatch, algorithm hitting ceiling for 4+ days without moving, mass price revert.</div></div>
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl ri">Risk at scale</span></div><div class="dc-txt">Pricing errors are the operators evaluate algorithm health primarily through price outputs. When prices look unexpected it prompts a check-in — which is why this area works hand in hand with proactive go-live monitoring and clear visibility into what was pushed.</div></div>
-    </div>
-  </div>
-
-  <div class="dep-card">
-    <div class="dep-card-hdr"><span class="dp h">High</span><span class="ds">Activate</span><span class="dep-card-name">UI visibility — operators can't confirm what Walkway pushed</span></div>
-    <div class="dep-card-body">
-      <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">Push history is incomplete or stale. Operators see false "Changes Waiting" statuses, grey calendar cells, or no recent activity — even when pushes have fired.</div></div>
-      <div class="dc"><div class="dc-hdr"><span class="dc-lbl cf">In practice</span><span class="dc-badge">7 tickets</span></div><div class="dc-txt">"Did the push actually happen, and can I see it?" is the most common product-trust question across the client base.</div></div>
-      <div class="dc"><div class="dc-hdr"><span class="dc-lbl ri">Risk at scale</span></div><div class="dc-txt">If operators can't see Walkway working in the first 30 days, the Day 30 expansion conversation is built on blind trust, not evidence. Structural blocker to the Proof → Scale transition.</div></div>
     </div>
   </div>
 
@@ -390,6 +384,8 @@ tr:last-child td{border-bottom:none}
   </div>
 
   <div class="dep-group">Scale & CS capacity</div>
+
+  <div style="font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:8px;margin-top:16px">Scale & CS capacity</div>
 
   <div class="dep-card">
     <div class="dep-card-hdr"><span class="dp h">High</span><span class="ds">Activate</span><span class="dep-card-name">No proactive go-live monitoring for new autopilot products</span></div>
@@ -429,7 +425,7 @@ tr:last-child td{border-bottom:none}
 
   <di
 
-    <div class="dep-card">
+  <div class="dep-card">
     <div class="dep-card-hdr"><span class="dpri m">Medium</span><span class="dstage exp">Expand</span><span class="dep-card-name">No automated D14/D30 lift report — manually prepared before every call</span></div>
     <div class="dep-card-body">
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">Before every Day 14 and Day 30 call, the CSM manually pulls lift metrics, formats data, and prepares a per-account performance summary. There is no automated report generation tied to these motion milestones — each report is built from scratch per account.</div></div>
@@ -439,6 +435,8 @@ tr:last-child td{border-bottom:none}
   </div>
 
   v class="dep-group">Onboarding & expansion</div>
+
+  <div style="font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:8px;margin-top:16px">Onboarding & expansion</div>
 
   <div class="dep-card">
     <div class="dep-card-hdr"><span class="dp m">Medium</span><span class="ds">Activate + Scale</span><span class="dep-card-name">Manual ticket step before products appear in the Walkway UI feed</span></div>
@@ -476,7 +474,7 @@ tr:last-child td{border-bottom:none}
     </div>
   </div>
 
-    <div class="dep-card">
+  <div class="dep-card">
       <div class="dep-card-hdr"><span class="dpri m">Medium</span><span class="dstage sca">Scale</span><span class="dep-card-name">No self-serve training materials for operators — every onboarding is manual</span></div>
       <div class="dep-card-body">
         <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">There are no product-embedded tutorials, video guides, or self-serve training assets for operators setting up Walkway. Every onboarding — price rules, ceiling/floor setup, autopilot configuration — is walked through live by the CSM. No reusable materials that operators can reference independently after the call.</div></div>
@@ -485,8 +483,17 @@ tr:last-child td{border-bottom:none}
       </div>
     </div>
 
-
+  <div class="dep-card">
+    <div class="dep-card-hdr"><span class="dp m">Medium</span><span class="ds">Activate</span><span class="dep-card-name">UI visibility — push history can be hard to follow for operators</span></div>
+    <div class="dep-card-body">
+      <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">Visibility into what Walkway pushed can sometimes be hard to follow for operators — particularly on Bokun. More of a stability and polish area than a blocker to autopilot or expansion.</div></div>
+      <div class="dc"><div class="dc-hdr"><span class="dc-lbl cf">In practice</span><span class="dc-badge">7 tickets</span></div><div class="dc-txt">"Did the push actually happen, and can I see it?" is the most common product-trust question across the client base.</div></div>
+      <div class="dc"><div class="dc-hdr"><span class="dc-lbl ri">Risk at scale</span></div><div class="dc-txt">If operators can't see Walkway working in the first 30 days, the Day 30 expansion conversation is built on blind trust, not evidence. Structural blocker to the Proof → Scale transition.</div></div>
+    </div>
+  </div>
 </div>
+
+
 
 <!-- 5. HIRING -->
 <div class="sec">
