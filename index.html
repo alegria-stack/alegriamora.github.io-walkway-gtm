@@ -705,27 +705,27 @@ tr:last-child td{border-bottom:none}
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
     <div style="background:#FEEFEF;border-radius:8px;padding:14px;text-align:center">
       <div style="font-size:28px;font-weight:600;color:#E24B4A">~10</div>
-      <div style="font-size:11px;color:#9B2121;margin-top:2px;font-weight:500">Pricing correctness issues</div>
-      <div style="font-size:10px;color:#888;margin-top:3px">wrong currency · floor/ceiling · pushes clients don't trust</div>
+      <div style="font-size:11px;color:#9B2121;margin-top:2px;font-weight:500">Pricing accuracy</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">currency display · floor/ceiling behavior · push timing</div>
     </div>
     <div style="background:#FFF8ED;border-radius:8px;padding:14px;text-align:center">
       <div style="font-size:28px;font-weight:600;color:#BA7517">~7</div>
-      <div style="font-size:11px;color:#633806;margin-top:2px;font-weight:500">Autopilot delivery failures</div>
-      <div style="font-size:10px;color:#888;margin-top:3px">recommendations not firing · products not picked up</div>
+      <div style="font-size:11px;color:#633806;margin-top:2px;font-weight:500">Autopilot reliability</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">delivery timing · product pickup · recommendation gaps</div>
     </div>
     <div style="background:#F5F4FF;border-radius:8px;padding:14px;text-align:center">
       <div style="font-size:28px;font-weight:600;color:#7F77DD">~6</div>
-      <div style="font-size:11px;color:#3C3489;margin-top:2px;font-weight:500">Integration sync issues</div>
-      <div style="font-size:10px;color:#888;margin-top:3px">pushes to wrong channel · mapping errors · parity failures</div>
+      <div style="font-size:11px;color:#3C3489;margin-top:2px;font-weight:500">Channel sync</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">channel mapping · parity alignment · catalog scoping</div>
     </div>
     <div style="background:#F7F6F4;border-radius:8px;padding:14px;text-align:center">
       <div style="font-size:28px;font-weight:600;color:#555">~7</div>
-      <div style="font-size:11px;color:#333;margin-top:2px;font-weight:500">UI visibility gaps</div>
-      <div style="font-size:10px;color:#888;margin-top:3px">"did the push happen?" — most common trust question</div>
+      <div style="font-size:11px;color:#333;margin-top:2px;font-weight:500">Push visibility</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">push confirmation · history display · status clarity</div>
     </div>
   </div>
 
-  <div class="callout grey" style="margin-bottom:18px">40 of 42 CS-logged issues fall within the last 90 days — current patterns, not legacy noise. The common thread: <strong>operators can't always confirm that Walkway pushed what it says it pushed.</strong></div>
+  <div class="callout grey" style="margin-bottom:18px">40 of 42 CS-logged issues fall within the last 90 days — current patterns, not legacy noise.</div>
 
   <style>
   .dep3{background:#fff;border-radius:8px;border:1px solid #E8E8E8;overflow:hidden;margin-bottom:10px}
@@ -752,11 +752,13 @@ tr:last-child td{border-bottom:none}
 
   <div class="dep3-group">Trust & reliability</div>
 
+  <div class="dep3-group">Trust &amp; reliability</div>
+
   <div class="dep3">
     <div class="dep3-hdr"><span class="dp3 h">High</span><span class="ds3">Activate</span><span class="dep3-name">Autopilot failure detection — algorithm fires but prices don't push</span></div>
     <div class="dep3-body">
       <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">Algorithm fires recommendations and marks products for auto-apply — but prices are never pushed to the booking system. No alert triggered when this happens. Discovery is entirely reactive.</div></div>
-      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">7 tickets</span></div><div class="d3c-txt ip">Mi Bike Tours: autopilot never fired despite autoApply=TRUE (subscriptionType=NULL). 30 days on autopilot, zero prices pushed. Discovered only because the operator flagged it — trust damaged, expansion delayed ~3 weeks. Also confirmed: Ciao Florence/Pizza Express (Bokun not picked up), Empire Tours (no recommendations at go-live), Everyday California (auto-pilot stalled), HTA (members don't see price recommendations).</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">7 tickets</span></div><div class="d3c-txt ip">1 confirmed account (Mi Bike Tours) — autopilot never fired despite autoApply=TRUE, 30 days with zero prices pushed, discovered when the operator flagged it. 7 tickets tracked across related delivery and pickup issues across additional accounts.</div></div>
       <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">Every active account is exposed — there is no monitoring that catches this without engineering or team manually checking each account. At 30+ accounts this is operationally impossible. Silent failures cause unexplained churn: operators blame the product, not a configuration bug, and we have no visibility to correct that narrative.</div></div>
     </div>
   </div>
@@ -766,16 +768,7 @@ tr:last-child td{border-bottom:none}
     <div class="dep3-body">
       <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">Operators receive incorrect price outputs — wrong currency, prices stuck at floor or ceiling without updating, pushes that are too high or too low relative to market, or algorithm behavior they can't explain or replicate. This is the most frequently reported theme across the entire client base.</div></div>
       <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">10 tickets</span></div><div class="d3c-txt ip">Amigo Tours: price recommendations shown in USD for MXN products. Carrani Tours: price rules error (USD display + missing unit prices) blocking go-live. Airboat Adventures: algorithm hitting ceiling, no movement for 4+ days. Everyday California (Xola): mass revert, prices pushed too high. Best of Switzerland: bookings created below UI price floor.</div></div>
-      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">Pricing errors are the fastest trust destroyer. An operator who sees wrong prices pushed is more likely to turn off autopilot than one experiencing any other bug type — and they do it before calling us. We are not in the room when that decision happens. Each pricing correctness incident delays or blocks the Day 30 expansion conversation on that account.</div></div>
-    </div>
-  </div>
-
-  <div class="dep3">
-    <div class="dep3-hdr"><span class="dp3 h">High</span><span class="ds3">Activate</span><span class="dep3-name">UI visibility — operators can't confirm what Walkway pushed</span></div>
-    <div class="dep3-body">
-      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">After a price push fires, operators have no reliable way to confirm it happened, see what changed, or understand why. The interface shows inconsistent states: missing push history, false "Changes Waiting" status on autopilot products, erratic calendar loading, or €0 as base price instead of actual previous price.</div></div>
-      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">7 tickets</span></div><div class="d3c-txt ip">HTA: cannot see recent price pushes (ENG-622). False "Changes Waiting" status on autopilot products (ENG-684). Calendar heatmap: grey cells with no compset data, erratic loading (ENG-552). Bokun: recent activity shows €0 as base price instead of actual previous price (ENG-500). "Did the push actually happen, and can I see it?" is the most common product-trust question across the client base.</div></div>
-      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">If operators can't see Walkway working in the first 30 days, the Day 30 expansion conversation is built on blind trust — not evidence. This is a structural blocker for the Proof → Scale cohort transition. Every expansion proposal depends on the operator believing the algorithm is doing what we say it's doing.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">Operators need to trust price outputs. When prices look unexpected it prompts a check-in — which works hand in hand with proactive go-live monitoring. Each pricing accuracy incident can slow the expansion conversation on that account.</div></div>
     </div>
   </div>
 
@@ -798,6 +791,8 @@ tr:last-child td{border-bottom:none}
   </div>
 
   <div class="dep3-group">Scale & CS capacity</div>
+
+  <div class="dep3-group">Scale &amp; CS capacity</div>
 
   <div class="dep3">
     <div class="dep3-hdr"><span class="dp3 h">High</span><span class="ds3">Activate</span><span class="dep3-name">No proactive go-live monitoring — new autopilot products not tracked after first push</span></div>
@@ -846,6 +841,8 @@ tr:last-child td{border-bottom:none}
 
   <div class="dep3-group">Onboarding & expansion</div>
 
+  <div class="dep3-group">Onboarding &amp; expansion</div>
+
   <div class="dep3">
     <div class="dep3-hdr"><span class="dp3 m">Medium</span><span class="ds3">Activate + Scale</span><span class="dep3-name">Manual ticket step before products appear in the Walkway UI feed</span></div>
     <div class="dep3-body">
@@ -881,6 +878,25 @@ tr:last-child td{border-bottom:none}
       <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">8 case studies needed in Q3 across the cohort progression. Terry's outreach sequences for net new pipeline depend on case study assets arriving at predictable moments — specifically when Proof accounts hit their first expansion milestone. Without automation, case study timing is unpredictable, outreach sequences can't be reliably built around them, and the refer loop stays manual and fragile.</div></div>
     </div>
   </div>
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 m">Medium</span><span class="ds3">Scale</span><span class="dep3-name">No self-serve training materials — every onboarding is walked through live</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">There are no product-embedded tutorials, video guides, or self-serve training assets for operators setting up Walkway. Every onboarding session — price rules, ceiling/floor setup, autopilot configuration — is walked through live by the CSM. No reusable materials that operators can reference independently between or after calls.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">Every onboarding</span></div><div class="d3c-txt ip">Every onboarding covers the same foundational setup steps from scratch. Operators who need to revisit a configuration step post-call have no self-serve resource — they create a support request or wait for the next scheduled call. No reusable assets exist today.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">Limits how many operators a single CSM can onboard concurrently. Also increases time-to-autopilot when operators get stuck on setup steps post-call. At 30+ operators, self-serve guides directly reduce CSM dependency and accelerate WAAP by removing the human bottleneck from routine setup questions.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 m">Medium</span><span class="ds3">Activate</span><span class="dep3-name">UI visibility — push history can be hard to follow for operators</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">Visibility into what Walkway pushed can sometimes be hard to follow for operators — particularly on Bokun. Inconsistent calendar states, push history display, or status labels. More of a stability and polish area than a blocker to autopilot or expansion.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">7 tickets</span></div><div class="d3c-txt ip">Seen primarily on Bokun accounts — calendar display, push history and status labels can show inconsistent states. Has come up in operator check-ins as a usability question rather than a critical failure.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">Clearer push visibility builds confidence during onboarding and reduces inbound questions. Not a growth blocker today — improving it reduces friction and support calls as volume scales. Worth addressing as part of broader Bokun stability work.</div></div>
+    </div>
+  </div>
+
+
 
 </div>
 
