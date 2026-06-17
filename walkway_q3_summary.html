@@ -299,27 +299,27 @@ tr:last-child td{border-bottom:none}
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
     <div style="background:#FEEFEF;border-radius:8px;padding:14px;text-align:center">
       <div style="font-size:28px;font-weight:600;color:#E24B4A">~10</div>
-      <div style="font-size:11px;color:#9B2121;margin-top:2px;font-weight:500">Pricing correctness issues</div>
-      <div style="font-size:10px;color:#888;margin-top:3px">wrong currency · floor/ceiling · pushes clients don't trust</div>
+      <div style="font-size:11px;color:#9B2121;margin-top:2px;font-weight:500">Pricing accuracy</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">currency display · floor/ceiling behavior · push timing</div>
     </div>
     <div style="background:#FFF8ED;border-radius:8px;padding:14px;text-align:center">
       <div style="font-size:28px;font-weight:600;color:#BA7517">~7</div>
-      <div style="font-size:11px;color:#633806;margin-top:2px;font-weight:500">Autopilot delivery failures</div>
-      <div style="font-size:10px;color:#888;margin-top:3px">recommendations not firing · products not picked up</div>
+      <div style="font-size:11px;color:#633806;margin-top:2px;font-weight:500">Autopilot reliability</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">delivery timing · product pickup · recommendation gaps</div>
     </div>
     <div style="background:#F5F4FF;border-radius:8px;padding:14px;text-align:center">
       <div style="font-size:28px;font-weight:600;color:#7F77DD">~6</div>
-      <div style="font-size:11px;color:#3C3489;margin-top:2px;font-weight:500">Integration sync issues</div>
-      <div style="font-size:10px;color:#888;margin-top:3px">pushes to wrong channel · mapping errors · parity</div>
+      <div style="font-size:11px;color:#3C3489;margin-top:2px;font-weight:500">Channel sync</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">channel mapping · parity alignment · catalog scoping</div>
     </div>
     <div style="background:#F7F6F4;border-radius:8px;padding:14px;text-align:center">
       <div style="font-size:28px;font-weight:600;color:#555">~7</div>
-      <div style="font-size:11px;color:#333;margin-top:2px;font-weight:500">UI visibility gaps</div>
-      <div style="font-size:10px;color:#888;margin-top:3px">"did the push happen?" — most common trust question</div>
+      <div style="font-size:11px;color:#333;margin-top:2px;font-weight:500">Push visibility</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">push confirmation · history display · status clarity</div>
     </div>
   </div>
 
-  <div class="note grey" style="margin-bottom:16px">40 of 42 CS-logged issues fall within the last 90 days — current patterns, not legacy noise. The common thread: <strong>operators can't always confirm that Walkway pushed what it says it pushed.</strong></div>
+  <div class="note grey" style="margin-bottom:16px">40 of 42 CS-logged areas fall within the last 90 days — current patterns, not legacy noise.</div>
 
   <style>
   .dep-card{background:#fff;border:1px solid #E8E8E8;border-radius:8px;overflow:hidden;margin-bottom:10px}
@@ -348,7 +348,7 @@ tr:last-child td{border-bottom:none}
     <div class="dep-card-hdr"><span class="dp h">High</span><span class="ds">Activate</span><span class="dep-card-name">Autopilot failure detection</span></div>
     <div class="dep-card-body">
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">Algorithm fires recommendations but prices never push to the booking system. No alert is triggered — discovery is reactive.</div></div>
-      <div class="dc"><div class="dc-hdr"><span class="dc-lbl cf">In practice</span><span class="dc-badge">7 tickets</span></div><div class="dc-txt">Multiple accounts affected including a case where autopilot ran for 30 days with zero prices pushed — discovered only when the operator flagged it.</div></div>
+      <div class="dc"><div class="dc-hdr"><span class="dc-lbl cf">In practice</span><span class="dc-badge">7 tickets</span></div><div class="dc-txt">1 confirmed account (Mi Bike Tours) — autopilot enabled but no prices pushed for 30 days, discovered when the operator flagged it. 7 tickets tracked across related delivery and pickup issues.</div></div>
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl ri">Risk at scale</span></div><div class="dc-txt">Every active account is exposed. Without proactive detection, silent failures become unexplained churn — and operators blame the product, not a bug.</div></div>
     </div>
   </div>
@@ -358,7 +358,7 @@ tr:last-child td{border-bottom:none}
     <div class="dep-card-body">
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">Operators receive incorrect price outputs — wrong currency, prices stuck at floor or ceiling, pushes too high or too low, algorithm behavior they can't explain.</div></div>
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl cf">In practice</span><span class="dc-badge">10 tickets</span></div><div class="dc-txt">Largest single issue cluster across the client base. Examples: MXN/USD currency mismatch, algorithm hitting ceiling for 4+ days without moving, mass price revert.</div></div>
-      <div class="dc"><div class="dc-hdr"><span class="dc-lbl ri">Risk at scale</span></div><div class="dc-txt">Pricing errors are the fastest trust destroyer. An operator who sees a wrong price pushed is more likely to turn off autopilot than an operator experiencing any other bug type.</div></div>
+      <div class="dc"><div class="dc-hdr"><span class="dc-lbl ri">Risk at scale</span></div><div class="dc-txt">Pricing errors are the operators evaluate algorithm health primarily through price outputs. When prices look unexpected it prompts a check-in — which is why this area works hand in hand with proactive go-live monitoring and clear visibility into what was pushed.</div></div>
     </div>
   </div>
 
@@ -427,7 +427,18 @@ tr:last-child td{border-bottom:none}
     </div>
   </div>
 
-  <div class="dep-group">Onboarding & expansion</div>
+  <di
+
+    <div class="dep-card">
+    <div class="dep-card-hdr"><span class="dpri m">Medium</span><span class="dstage exp">Expand</span><span class="dep-card-name">No automated D14/D30 lift report — manually prepared before every call</span></div>
+    <div class="dep-card-body">
+      <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">Before every Day 14 and Day 30 call, the CSM manually pulls lift metrics, formats data, and prepares a per-account performance summary. There is no automated report generation tied to these motion milestones — each report is built from scratch per account.</div></div>
+      <div class="dc"><div class="dc-hdr"><span class="dc-lbl cf">In practice</span><span class="dc-badge">~2h/week</span></div><div class="dc-txt">At 11 active accounts today, approximately 2 hours per week goes into manual report preparation — time that competes directly with demos, expansion proposals, and onboarding calls.</div></div>
+      <div class="dc"><div class="dc-hdr"><span class="dc-lbl ri">GTM cost if unresolved</span></div><div class="dc-txt ri">At 30 accounts = 6h/week = one full day per CSM per week just on reports. Hard ceiling on how many accounts one CSM can carry without sacrificing call quality or expansion velocity.</div></div>
+    </div>
+  </div>
+
+  v class="dep-group">Onboarding & expansion</div>
 
   <div class="dep-card">
     <div class="dep-card-hdr"><span class="dp m">Medium</span><span class="ds">Activate + Scale</span><span class="dep-card-name">Manual ticket step before products appear in the Walkway UI feed</span></div>
@@ -450,7 +461,7 @@ tr:last-child td{border-bottom:none}
   <div class="dep-card">
     <div class="dep-card-hdr"><span class="dp m">Medium</span><span class="ds">Scale</span><span class="dep-card-name">OTA data gap — algorithm only sees direct bookings</span></div>
     <div class="dep-card-body">
-      <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">For operators selling through OTAs alongside direct, OTA bookings are invisible to the algorithm. It prices as if more capacity exists than it actually does.</div></div>
+      <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">This applies primarily when an operator connects only one booking channel to Walkway (most commonly on Bokun) while also selling through OTAs on a separate platform. When the algorithm only sees one channel, it works from an incomplete demand picture. The opportunity is finding the right optimization approach for operators with a split-channel strategy.</div></div>
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl cf">In practice</span><span class="dc-badge">1 account</span></div><div class="dc-txt">Venice City Tours: algorithm hurt packs ~2% because OTA bookings were invisible. Operator turned off autopilot on affected products as a result.</div></div>
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl ri">Risk at scale</span></div><div class="dc-txt">Affects any operator running significant OTA volume alongside direct. Will block expansion for OTA-heavy accounts in the pipeline and is particularly damaging for capacity-dependent products.</div></div>
     </div>
@@ -464,6 +475,16 @@ tr:last-child td{border-bottom:none}
       <div class="dc"><div class="dc-hdr"><span class="dc-lbl ri">Risk at scale</span></div><div class="dc-txt">8 case studies needed in Q3. Terry's outreach sequences depend on them arriving at the right moment. Without a trigger, case study delivery is unpredictable and outreach can't rely on them.</div></div>
     </div>
   </div>
+
+    <div class="dep-card">
+      <div class="dep-card-hdr"><span class="dpri m">Medium</span><span class="dstage sca">Scale</span><span class="dep-card-name">No self-serve training materials for operators — every onboarding is manual</span></div>
+      <div class="dep-card-body">
+        <div class="dc"><div class="dc-hdr"><span class="dc-lbl wi">What it is</span></div><div class="dc-txt">There are no product-embedded tutorials, video guides, or self-serve training assets for operators setting up Walkway. Every onboarding — price rules, ceiling/floor setup, autopilot configuration — is walked through live by the CSM. No reusable materials that operators can reference independently after the call.</div></div>
+        <div class="dc"><div class="dc-hdr"><span class="dc-lbl cf">In practice</span><span class="dc-badge">Every onboarding</span></div><div class="dc-txt">Every onboarding session covers the same foundational setup steps from scratch. Operators who need to revisit a configuration step between calls have no self-serve resource — they create a support request or wait for the next scheduled call.</div></div>
+        <div class="dc"><div class="dc-hdr"><span class="dc-lbl ri">GTM cost if unresolved</span></div><div class="dc-txt ri">Limits how many operators a single CSM can onboard concurrently. Also increases time-to-autopilot when operators get stuck on setup steps post-call. At 30+ operators, self-serve guides directly reduce CSM dependency and accelerate WAAP.</div></div>
+      </div>
+    </div>
+
 
 </div>
 
