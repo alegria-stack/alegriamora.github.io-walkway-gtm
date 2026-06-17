@@ -587,8 +587,8 @@ tr:last-child td{border-bottom:none}
       <thead><tr><th>Day (from sign)</th><th>What happens</th><th>Owner</th><th>If missed</th></tr></thead>
       <tbody>
         <tr><td style="color:#7F77DD;font-weight:600">Day 0 — Sign</td><td>Contract signed. API token request sent + onboarding guide shared within 2 hours.</td><td>Alegria / CSM</td><td>Same-day action required. No waiting.</td></tr>
-        <tr class="stripe"><td style="color:#7F77DD;font-weight:600">Day 1–3</td><td>API token received. Products identified and mapped in Walkway. Configuration complete. No prices pushed yet.</td><td>PA / Engineering</td><td>Escalate to PA immediately if token not received by Day 2.</td></tr>
-        <tr><td style="color:#7F77DD;font-weight:600">Day 5</td><td>Testing — first price push triggered manually. PA verifies all products mapped correctly.</td><td>PA + CSM</td><td>Bug flag → hold go-live until resolved.</td></tr>
+        <tr class="stripe"><td style="color:#7F77DD;font-weight:600">Day 1–3</td><td>API token received. Products identified and mapped in Walkway. Configuration complete. No prices pushed yet.</td><td>Engineering or team</td><td>Escalate immediately if token not received by Day 2.</td></tr>
+        <tr><td style="color:#7F77DD;font-weight:600">Day 5</td><td>Testing — first price push triggered manually. Engineering or team verifies all products mapped correctly.</td><td>Engineering + CSM</td><td>Bug flag → hold go-live until resolved.</td></tr>
         <tr class="stripe"><td style="color:#1D9E75;font-weight:600">Day 7–10 ✅ GO LIVE</td><td style="background:#EAF7F2;font-weight:600">First live price push. Autopilot active. Motion clock starts here.</td><td>CSM</td><td>Escalate to Alegria. Delay = motion delay = churn risk.</td></tr>
       </tbody>
     </table>
@@ -672,7 +672,7 @@ tr:last-child td{border-bottom:none}
     <table>
       <thead><tr><th>Stage</th><th>Definition</th><th>Owner</th></tr></thead>
       <tbody>
-        <tr><td>Onboarding</td><td>API token requested. Products being mapped. Target: live within 7-10 days.</td><td>CSM / PA</td></tr>
+        <tr><td>Onboarding</td><td>API token requested. Products being mapped. Target: live within 7-10 days.</td><td>CSM / Engineering</td></tr>
         <tr class="stripe" style="background:#EAF7F2"><td><strong>Go Live ✅</strong></td><td><strong>First price pushed. Motion clock starts. Expansion deal auto-created.</strong></td><td>CSM</td></tr>
         <tr><td>Active — Healthy</td><td>WAAP running. D30 lift confirmed. Expansion trigger monitoring.</td><td>CSM</td></tr>
         <tr class="stripe" style="background:#FFF8ED"><td>Active — At Risk</td><td>WAAP dropped, D30 missed, or no expansion by D60. Intervention required.</td><td>Alegria</td></tr>
@@ -701,32 +701,187 @@ tr:last-child td{border-bottom:none}
 <div class="section">
   <div class="sec-hdr"><div class="sec-num">9</div><div class="sec-title">Dependencies — what needs to ship for the motion to work</div></div>
 
-  <div class="callout grey">Problems that block specific loop stages from running at scale. DS-1 and CS-2 are the top two priorities — without them, Activate and Expand run manually and won't hold as volume grows.</div>
-
-  <div class="sub-hdr">Data Science / Engineering</div>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Stage blocked</th><th>Problem</th><th>What this looks like in practice</th></tr></thead>
-      <tbody>
-        <tr style="background:#FFF8ED"><td><span style="background:#BA7517;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Activate</span></td><td><strong>DS-1 ★</strong> No alert when algorithm fires but prices don't push</td><td>Mi Bikes sat on autopilot for 30 days with zero prices pushed. We found out because the operator told us. Trust was damaged and expansion was delayed by 3 weeks. Will repeat at scale.</td></tr>
-        <tr><td><span style="background:#BA7517;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Activate</span></td><td><strong>DS-2</strong> No WAAP leak detection (autopilot reversion)</td><td>Operator turns off autopilot — we don't know. WAAP drops silently. CSM is unprepared at the D30 call. Expansion conversation weakens at exactly the wrong moment.</td></tr>
-        <tr class="stripe"><td><span style="background:#1D9E75;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Expand</span></td><td><strong>DS-3</strong> No automated lift report at D14 and D30</td><td>CSM prepares every data report manually before every call. At 10 accounts = 2 hours/week. At 30 accounts = 6 hours/week. Not scalable.</td></tr>
-      </tbody>
-    </table>
+  <!-- Headline tiles -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
+    <div style="background:#FEEFEF;border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:28px;font-weight:600;color:#E24B4A">~10</div>
+      <div style="font-size:11px;color:#9B2121;margin-top:2px;font-weight:500">Pricing correctness issues</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">wrong currency · floor/ceiling · pushes clients don't trust</div>
+    </div>
+    <div style="background:#FFF8ED;border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:28px;font-weight:600;color:#BA7517">~7</div>
+      <div style="font-size:11px;color:#633806;margin-top:2px;font-weight:500">Autopilot delivery failures</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">recommendations not firing · products not picked up</div>
+    </div>
+    <div style="background:#F5F4FF;border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:28px;font-weight:600;color:#7F77DD">~6</div>
+      <div style="font-size:11px;color:#3C3489;margin-top:2px;font-weight:500">Integration sync issues</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">pushes to wrong channel · mapping errors · parity failures</div>
+    </div>
+    <div style="background:#F7F6F4;border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:28px;font-weight:600;color:#555">~7</div>
+      <div style="font-size:11px;color:#333;margin-top:2px;font-weight:500">UI visibility gaps</div>
+      <div style="font-size:10px;color:#888;margin-top:3px">"did the push happen?" — most common trust question</div>
+    </div>
   </div>
 
-  <div class="sub-hdr">Customer Success</div>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Stage blocked</th><th>Problem</th><th>What this looks like in practice</th></tr></thead>
-      <tbody>
-        <tr style="background:#FFF8ED"><td><span style="background:#BA7517;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Activate</span></td><td><strong>CS-2 ★</strong> No automated 30-day at-risk alert</td><td>At 15 accounts a CSM can track D30 manually. At 25, someone slips. At 35, multiple accounts hit D30 under 50% autopilot and nobody notices until the operator asks — or doesn't renew.</td></tr>
-        <tr><td><span style="background:#1D9E75;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Expand</span></td><td><strong>CS-1 ★</strong> No automated expansion trigger</td><td>The optimal moment to propose is when lift crosses the threshold. Without a trigger, CSM checks manually and often catches it 2-3 weeks late. By then the momentum is gone.</td></tr>
-        <tr class="stripe"><td><span style="background:#085041;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Refer</span></td><td><strong>CS-3</strong> Case study creation is manual and slow</td><td>Boost Portugal hit their lift milestone. It took 3 weeks to get a case study published. In those 3 weeks, Terry's outreach sequences went out with no Boost case study. The loop leaked at the exact moment it should have compounded.</td></tr>
-        <tr><td><span style="background:#888;color:#FFF;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600">Scale</span></td><td><strong>CS-5</strong> Manual PA onboarding per product</td><td>PA manually configures every product. A 20-product batch takes hours. At 40 active operators, PA becomes the onboarding bottleneck — not sales, not CS.</td></tr>
-      </tbody>
-    </table>
+  <div class="callout grey" style="margin-bottom:18px">40 of 42 CS-logged issues fall within the last 90 days — current patterns, not legacy noise. The common thread: <strong>operators can't always confirm that Walkway pushed what it says it pushed.</strong></div>
+
+  <style>
+  .dep3{background:#fff;border-radius:8px;border:1px solid #E8E8E8;overflow:hidden;margin-bottom:10px}
+  .dep3-hdr{display:flex;gap:8px;align-items:center;padding:9px 14px;border-bottom:1px solid #F0F0F0;background:#FAFAFA;flex-wrap:wrap}
+  .dp3{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px}
+  .dp3.h{background:#FFF8ED;color:#7A4500}
+  .dp3.m{background:#F5F4FF;color:#3C3489}
+  .ds3{font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;background:#F0F0F0;color:#555}
+  .dep3-name{font-size:12px;font-weight:600;color:#1a1a1a;flex:1}
+  .dep3-body{display:grid;grid-template-columns:1fr 1fr 1fr;font-size:11px}
+  .d3c{padding:9px 12px;border-right:1px solid #F0F0F0}
+  .d3c:last-child{border-right:none}
+  .d3c-hdr{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+  .d3c-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+  .d3c-lbl.wi{color:#888}
+  .d3c-lbl.ip{color:#E24B4A}
+  .d3c-lbl.ri{color:#BA7517}
+  .d3c-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:#FEEFEF;color:#9B2121}
+  .d3c-txt{color:#444;line-height:1.5}
+  .d3c-txt.ip{color:#9B2121}
+  .d3c-txt.ri{color:#633806}
+  .dep3-group{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#888;margin:18px 0 10px}
+  </style>
+
+  <div class="dep3-group">Trust & reliability</div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 h">High</span><span class="ds3">Activate</span><span class="dep3-name">Autopilot failure detection — algorithm fires but prices don't push</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">Algorithm fires recommendations and marks products for auto-apply — but prices are never pushed to the booking system. No alert triggered when this happens. Discovery is entirely reactive.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">7 tickets</span></div><div class="d3c-txt ip">Mi Bike Tours: autopilot never fired despite autoApply=TRUE (subscriptionType=NULL). 30 days on autopilot, zero prices pushed. Discovered only because the operator flagged it — trust damaged, expansion delayed ~3 weeks. Also confirmed: Ciao Florence/Pizza Express (Bokun not picked up), Empire Tours (no recommendations at go-live), Everyday California (auto-pilot stalled), HTA (members don't see price recommendations).</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">Every active account is exposed — there is no monitoring that catches this without engineering or team manually checking each account. At 30+ accounts this is operationally impossible. Silent failures cause unexplained churn: operators blame the product, not a configuration bug, and we have no visibility to correct that narrative.</div></div>
+    </div>
   </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 h">High</span><span class="ds3">Activate</span><span class="dep3-name">Pricing correctness — wrong currency, floor/ceiling errors, pushes operators don't trust</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">Operators receive incorrect price outputs — wrong currency, prices stuck at floor or ceiling without updating, pushes that are too high or too low relative to market, or algorithm behavior they can't explain or replicate. This is the most frequently reported theme across the entire client base.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">10 tickets</span></div><div class="d3c-txt ip">Amigo Tours: price recommendations shown in USD for MXN products. Carrani Tours: price rules error (USD display + missing unit prices) blocking go-live. Airboat Adventures: algorithm hitting ceiling, no movement for 4+ days. Everyday California (Xola): mass revert, prices pushed too high. Best of Switzerland: bookings created below UI price floor.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">Pricing errors are the fastest trust destroyer. An operator who sees wrong prices pushed is more likely to turn off autopilot than one experiencing any other bug type — and they do it before calling us. We are not in the room when that decision happens. Each pricing correctness incident delays or blocks the Day 30 expansion conversation on that account.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 h">High</span><span class="ds3">Activate</span><span class="dep3-name">UI visibility — operators can't confirm what Walkway pushed</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">After a price push fires, operators have no reliable way to confirm it happened, see what changed, or understand why. The interface shows inconsistent states: missing push history, false "Changes Waiting" status on autopilot products, erratic calendar loading, or €0 as base price instead of actual previous price.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">7 tickets</span></div><div class="d3c-txt ip">HTA: cannot see recent price pushes (ENG-622). False "Changes Waiting" status on autopilot products (ENG-684). Calendar heatmap: grey cells with no compset data, erratic loading (ENG-552). Bokun: recent activity shows €0 as base price instead of actual previous price (ENG-500). "Did the push actually happen, and can I see it?" is the most common product-trust question across the client base.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">If operators can't see Walkway working in the first 30 days, the Day 30 expansion conversation is built on blind trust — not evidence. This is a structural blocker for the Proof → Scale cohort transition. Every expansion proposal depends on the operator believing the algorithm is doing what we say it's doing.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 h">High</span><span class="ds3">Activate + Scale</span><span class="dep3-name">Autopilot movement tracking — ON→OFF→ON history not captured</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">We record when autopilot first goes live — but not when it turns off, when it comes back on, how long it was inactive, or what triggered the change. Full movement history (ON → OFF → ON with timestamps and context) doesn't exist. Applies both to new accounts activating and to mature Scale accounts with large product portfolios.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">1 account · 3 products</span></div><div class="d3c-txt ip">Venice City Tours: turned off autopilot on 3 products due to OTA data gap affecting algorithm accuracy. Not detected until engineering or team manually checked. No timestamp, no duration, no context captured. Expansion conversation at D30 was weakened because lift data looked wrong — autopilot had been partially off.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">WAAP headline number can be overstated if products silently drop off. Day 30 lift data is only meaningful if we can confirm autopilot was running the whole time. For Scale accounts with 20–40 products, silent drop-off on even 5 products is invisible — and could signal algorithm distrust on specific product types, not just a setup error.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 h">High</span><span class="ds3">Scale</span><span class="dep3-name">Winning the star product — no simulation tool for non-activated products</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">Operators with high-value flagship products price them manually because their own strategy is working. They won't hand these to Walkway until they can see that Walkway's recommendations match or beat their own approach. No tool exists today to show projected lift on a product that hasn't been activated yet — no back-tested view, no simulation, no "what would Walkway have done last month?" capability.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">Active blocker</span></div><div class="d3c-txt ip">Full portfolio expansion for Scale 3a accounts — the two highest-value expansion targets in Q3 — depends on operators trusting Walkway with their best products. Today we cannot show them what that would look like before they commit. The expansion ask is based on trust alone, not evidence on their specific crown jewel products.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">Will recur with any operator who has one or two flagship products priced confidently. Blocks the full-portfolio close on the highest-ACV expansion conversations. Without a simulation or back-test tool, "expand to your full portfolio" is always a leap of faith — not a data-backed decision. This is the single biggest unlock for the Scale full portfolio sub-cohort.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3-group">Scale & CS capacity</div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 h">High</span><span class="ds3">Activate</span><span class="dep3-name">No proactive go-live monitoring — new autopilot products not tracked after first push</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">When a product first goes live on autopilot, no system places it in a monitored "go-live" bucket to verify it's pushing prices correctly in the first 24–72 hours. Alegria manually sets reminders: check in 24h, then 1 week. Operators sometimes flag issues before we do.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">Every go-live</span></div><div class="d3c-txt ip">Affects every new product activation today. Multiple instances where operators have flagged go-live issues (wrong prices, no pushes) before the team caught them — setting a reactive tone at the most trust-critical moment in the relationship.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">At 30+ go-lives per quarter, manual reminders will miss cases. Those missed cases are the ones most likely to cause early churn — within the first two weeks of autopilot, before trust is established. Reactive discovery at this stage is particularly damaging because the operator has no reference point yet for whether something is normal or broken.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 h">High</span><span class="ds3">Activate</span><span class="dep3-name">No 30-day at-risk alert — accounts approaching Day 30 with low autopilot undetected</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">No automated flag when an account approaches Day 30 with autopilot below the 90% threshold. The team tracks this manually across all active accounts — checking each one's autopilot status before the D30 call to confirm the expansion conversation is data-backed.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">Time-bomb</span></div><div class="d3c-txt ip">No accounts confirmed missed yet — currently manageable at 13 active accounts with the team checking manually. This is a dependency that breaks at a specific scale threshold, not gradually. The risk is invisible until it fires.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">At 15 accounts: manageable. At 25: someone slips. At 35: multiple accounts hit Day 30 under 90% autopilot without anyone noticing. Missed D30 = missed expansion proposal = 4-week delay per account + weakened relationship at exactly the moment trust should peak. At 30+ accounts, the cumulative cost of this single gap could account for multiple $3,500–$7,500 expansion proposals delayed per quarter.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 m">Medium</span><span class="ds3">Expand</span><span class="dep3-name">Lift quality monitoring — no flag when lift falls below 5% after 40–50 days</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">No system automatically flags accounts where cumulative lift is below a meaningful threshold (e.g. <5%) after 40–50 days live. The team identifies this during manual data prep before D30 calls — not proactively. When lift is low and we don't catch it early, the expansion conversation is built on weak data.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">2 accounts</span></div><div class="d3c-txt ip">Airboat Adventures and Ciao Florence both had lift below 5% at 40–50 days live. Discovered during manual data review before a call — then a Linear ticket was raised for the team to investigate algorithm performance. In both cases, the discovery was reactive and narrowly avoided a D30 call with misleading data.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">At 30+ accounts, manual data review before every call will miss some. An automated flag at day 40 would allow investigation and intervention before the operator is already disappointed — converting what would be a trust-damaging call into a proactive "we caught this and here's what we're doing" conversation. The difference in relationship outcome is significant.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 m">Medium</span><span class="ds3">Activate + Scale</span><span class="dep3-name">Integration launch stability — no SLA tracking for new integration issues</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">When a new integration launches commercially, a predictable wave of operator-reported issues follows in the first 30 days — autopilot pickup failures, catalog scoping errors, price push visibility issues, parity problems. Each issue requires a manual Linear ticket and follow-up from Alegria. No structured SLA or intake process exists.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">Bokun pattern</span></div><div class="d3c-txt ip">Bokun is the highest-friction integration surface across the entire client base: recurring autopilot pickup failures, catalog scoping issues, price push visibility gaps, and parity mapping errors. Each operator incident generates a Linear ticket + team call. PrioTicket launches July 6 with 10 new operators and will follow the same pattern.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">At 10+ new PrioTicket operators in July alongside existing accounts, manual issue intake through the CSM is unsustainable. Without structured SLAs, operator-facing resolution timelines are unpredictable — and first-impression failures in the first 30 days are disproportionately damaging to long-term account health and expansion velocity.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 m">Medium</span><span class="ds3">Expand</span><span class="dep3-name">No automated D14/D30 lift report — manually prepared before every call</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">Before every Day 14 and Day 30 call, Alegria or the CSM manually pulls metrics, formats data, and prepares a per-account lift summary. There is no automated report generation tied to these motion milestones. Each report takes meaningful time to build for each account.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">~2h/week</span></div><div class="d3c-txt ip">At 11 active accounts today, approximately 2 hours per week goes into manual report preparation. This time directly competes with demo capacity and expansion proposal preparation — both higher-value activities.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">At 30 accounts = 6h/week = one full day per CSM per week just on report preparation. This is a hard ceiling on how many accounts one CSM can carry without sacrificing call quality or expansion velocity. Automated lift reports at D14 and D30 are the direct unlock for CS capacity at scale.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3-group">Onboarding & expansion</div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 m">Medium</span><span class="ds3">Activate + Scale</span><span class="dep3-name">Manual ticket step before products appear in the Walkway UI feed</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">To add a product to dynamic pricing, the product does not automatically appear in the Walkway UI product feed. Alegria creates a Linear ticket requesting engineering or team to add it. Until that ticket is resolved, the product cannot be configured or set up — it doesn't exist in the system from a setup perspective. A self-serve product entry solution is in progress but not yet live.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">Every batch</span></div><div class="d3c-txt ip">Affects every expansion batch today: create ticket → wait for product to appear in feed → configure → go-live. Each ticket adds 1–3 days to the start of onboarding. In progress as a platform improvement but not yet live.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">At 30-product Amigo batches, this delay compounds across multiple products and across multiple concurrent batches. Every day a product isn't in the feed is a day it's not on autopilot — directly costing WAAP. This is also a meaningful friction point that makes large batch commitments harder to make: if the operator commits to 30 products and the setup takes two weeks to even begin, the relationship expectation is set wrong from the start.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 m">Medium</span><span class="ds3">Scale</span><span class="dep3-name">Onboarding scalability — process validated at 5–7 products, Q3 requires 15–30 product batches</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">The full onboarding pipeline — ticket creation, feed entry, configuration, testing, go-live — has only been run at batches of 5–7 products at a time. Q3 Scale accounts (Amigo 15–30 products per batch, Boost full portfolio) require batches up to 4–5x larger. The process has not been validated or stress-tested at that volume.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">Not yet tested</span></div><div class="d3c-txt ip">No large-batch onboarding has been completed. The risk is unknown until attempted — which makes committing to a 30-product July batch, without validating the process first, a meaningful operational risk that could damage the relationship if something goes wrong mid-batch.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">If a large batch fails mid-onboarding — wrong products configured, pricing rules not applied, products going live out of sequence — the operator's confidence in Walkway as a scalable partner is damaged exactly when we're asking for full portfolio commitment. A test run or capacity confirmation from engineering before the Amigo July batch is on the critical path.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 m">Medium</span><span class="ds3">Scale</span><span class="dep3-name">OTA data gap — algorithm only sees direct channel bookings</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">For operators selling through both direct channels and OTAs (GetYourGuide, Viator, Datagist), OTA bookings are completely invisible to the algorithm. It prices direct as if full capacity is available when OTAs have already partially filled it — leading to over-pricing relative to actual remaining demand.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">1 account</span></div><div class="d3c-txt ip">Venice City Tours: algorithm hurt packs ~2% because OTA bookings (Datagist) were invisible to the algorithm. Operator turned off autopilot on affected products as a result. The OTA data gap was the root cause of the autopilot reversion tracked in DS-2.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">Affects any operator running significant OTA volume alongside direct — which is most mid-market and Scale-tier operators in the tour and attraction space. Particularly damaging for capacity-dependent products (bus tours, boat tours) where getting one seat wrong changes the fill economics materially. Will block expansion for any OTA-heavy account in the pipeline until resolved.</div></div>
+    </div>
+  </div>
+
+  <div class="dep3">
+    <div class="dep3-hdr"><span class="dp3 m">Medium</span><span class="ds3">Refer</span><span class="dep3-name">No automated case study trigger at milestone events</span></div>
+    <div class="dep3-body">
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl wi">What it is</span></div><div class="d3c-txt">No system captures when an operator crosses a meaningful lift milestone and initiates a case study workflow. Case studies are created when the team manually initiates them — not when performance data signals the right moment. The timing is unpredictable and disconnected from actual operator achievement.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ip">In practice</span><span class="d3c-badge">0 automated</span></div><div class="d3c-txt ip">All case studies to date have been manually initiated. There is no trigger that fires when an operator hits a lift threshold, no automated data pull for case study content, and no workflow for getting operator approval and publishing the asset. Each case study is created ad-hoc when the team remembers to start the process.</div></div>
+      <div class="d3c"><div class="d3c-hdr"><span class="d3c-lbl ri">Risk at scale</span></div><div class="d3c-txt ri">8 case studies needed in Q3 across the cohort progression. Terry's outreach sequences for net new pipeline depend on case study assets arriving at predictable moments — specifically when Proof accounts hit their first expansion milestone. Without automation, case study timing is unpredictable, outreach sequences can't be reliably built around them, and the refer loop stays manual and fragile.</div></div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ── SECTION 10: OKRs ───────────────────────────────────── -->
